@@ -7,14 +7,28 @@ import {
   TableCell,
   Paper,
 } from "@mui/material";
-import personList from "../data/users.json";
+import axios from "../utils/axios";
+//import personList from "../data/users.json";
 import PersonRow from "../components/PersonRow";
 import PersonForm from "../components/PersonForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Persons() {
-  const [persons, setPersons] = useState(personList);
+  const [persons, setPersons] = useState([]);
   const [editPerson, setEditPerson] = useState({});
+
+  const getPersons = async () => {
+    try {
+      const response = await axios.get("/persons");
+      setPersons(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getPersons();
+  }, []);
 
   const renderPersons = () => {
     return persons.map((person) => {
@@ -31,20 +45,38 @@ function Persons() {
 
   const addPerson = (person) => {
     //console.log(person);
-    
-    let personsTmp = [...persons];
-    if(person.id === ""){
-        person.id = Math.random().toString(36).substring(2,9);
-        personsTmp.push(person);
-    }else{
-        let index = personsTmp.findIndex((p)=>p.id == person.id);
-        personsTmp[index] = person;
+
+    if (person.id === "") {
+      person.id = Math.random().toString(36).substring(2, 9);
+      //personsTmp.push(person);
+      try {
+        axios.post("/persons", person).then((response) => {
+          getPersons();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        axios.put("/persons/" + person.id, person).then((response) => {
+          getPersons();
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
-    setPersons(personsTmp);
   };
 
   const handleDelete = (person) => {
-    setPersons(persons.filter((p) => p.id != person.id));
+    //setPersons(persons.filter((p) => p.id != person.id));
+    try {
+      axios.delete("/persons/" + person.id)
+      .then((response) => {
+        getPersons();
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleEdit = (person) => {
