@@ -1,8 +1,9 @@
 
 import {Box, Button, TextField} from '@mui/material'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
-function PersonForm({addPerson}) {
+function PersonForm({addPerson, editPerson}) {
+    const [id, setId] = useState('')
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -10,13 +11,22 @@ function PersonForm({addPerson}) {
 
     const handleClick = () => {
         if(username!=""){
-            addPerson({username: username, name: name, email: email, phone: phone})
+            addPerson({id, username: username, name: name, email: email, phone: phone})
+            setId('')
             setUsername('')
             setName('')
             setEmail('')
             setPhone('')
         }
     }
+
+    useEffect(()=>{
+        setId(editPerson.id)
+        setUsername(editPerson.username)
+        setName(editPerson.name)
+        setEmail(editPerson.email)
+        setPhone(editPerson.phone)
+    },[editPerson])
   return (
     <Box
       component="form"
