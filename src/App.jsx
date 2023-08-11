@@ -1,12 +1,12 @@
 import './App.css'
-import Persons from './pages/Persons'
+import rutas from './routes';
 
 function App() {
   //const [count, setCount] = useState(0)
 
   return (
     <>
-      <Persons />
+      {rutas}
     </>
   )
 }
