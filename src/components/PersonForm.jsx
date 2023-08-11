@@ -1,13 +1,16 @@
 
 import {Box, Button, TextField} from '@mui/material'
-import {useEffect, useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
+import { PersonContext } from '../context/PersonContext'
 
-function PersonForm({addPerson, editPerson}) {
+
+function PersonForm({addPerson}) {
     const [id, setId] = useState('')
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
+    const {editPerson, setEditPerson} = useContext(PersonContext);
 
     const handleClick = () => {
         if(username!=""){
@@ -17,6 +20,7 @@ function PersonForm({addPerson, editPerson}) {
             setName('')
             setEmail('')
             setPhone('')
+            setEditPerson({})
         }
     }
 

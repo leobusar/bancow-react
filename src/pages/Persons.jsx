@@ -12,6 +12,7 @@ import axios from "../utils/axios";
 import PersonRow from "../components/PersonRow";
 import PersonForm from "../components/PersonForm";
 import { useEffect, useState } from "react";
+import { PersonContext } from "../context/PersonContext";
 
 function Persons() {
   const [persons, setPersons] = useState([]);
@@ -51,7 +52,8 @@ function Persons() {
       //personsTmp.push(person);
       try {
         axios.post("/persons", person).then((response) => {
-          getPersons();
+          if (response.status)
+            getPersons();
         });
       } catch (error) {
         console.log(error);
@@ -59,7 +61,8 @@ function Persons() {
     } else {
       try {
         axios.put("/persons/" + person.id, person).then((response) => {
-          getPersons();
+          if(response.status)
+            getPersons();
         });
       } catch (error) {
         console.log(error);
@@ -71,8 +74,9 @@ function Persons() {
     //setPersons(persons.filter((p) => p.id != person.id));
     try {
       axios.delete("/persons/" + person.id)
-      .then((response) => {
-        getPersons();
+      .then((res) => {
+        if(res.status === 200)
+          getPersons();
       });
     } catch (error) {
       console.log(error);
@@ -84,8 +88,8 @@ function Persons() {
   };
 
   return (
-    <>
-      <PersonForm addPerson={addPerson} editPerson={editPerson} />
+    <PersonContext.Provider value={{editPerson, setEditPerson}}>
+      <PersonForm addPerson={addPerson} />
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -99,7 +103,7 @@ function Persons() {
           <TableBody>{renderPersons()}</TableBody>
         </Table>
       </TableContainer>
-    </>
+    </PersonContext.Provider>
   );
 }
 
