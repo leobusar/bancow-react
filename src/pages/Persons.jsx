@@ -12,11 +12,14 @@ import axios from "../utils/axios";
 import PersonRow from "../components/PersonRow";
 import PersonForm from "../components/PersonForm";
 import { useEffect, useState } from "react";
-import { PersonContext } from "../context/PersonContext";
+import { useDispatch } from "react-redux";
+import { setPersonEdit } from "../redux/actions";
 
 function Persons() {
   const [persons, setPersons] = useState([]);
-  const [editPerson, setEditPerson] = useState({});
+//  const personReducer = useSelector ((state) => state.personReducer)
+  const dispatch  = useDispatch();
+//  const personEdit = personReducer.personEdit
 
   const getPersons = async () => {
     try {
@@ -84,11 +87,12 @@ function Persons() {
   };
 
   const handleEdit = (person) => {
-    setEditPerson(person);
+    //setEditPerson(person);
+    dispatch(setPersonEdit(person))
   };
 
   return (
-    <PersonContext.Provider value={{editPerson, setEditPerson}}>
+    <>
       <PersonForm addPerson={addPerson} />
       <TableContainer component={Paper}>
         <Table>
@@ -103,7 +107,7 @@ function Persons() {
           <TableBody>{renderPersons()}</TableBody>
         </Table>
       </TableContainer>
-    </PersonContext.Provider>
+    </>
   );
 }
 

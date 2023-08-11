@@ -1,7 +1,8 @@
 
 import {Box, Button, TextField} from '@mui/material'
-import {useContext, useEffect, useState} from 'react'
-import { PersonContext } from '../context/PersonContext'
+import { useEffect, useState} from 'react'
+import { useSelector } from 'react-redux'
+//import { PersonContext } from '../context/PersonContext'
 
 
 function PersonForm({addPerson}) {
@@ -10,7 +11,10 @@ function PersonForm({addPerson}) {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
-    const {editPerson, setEditPerson} = useContext(PersonContext);
+    const personReducer = useSelector ((state) => state.personReducer)
+    const editPerson = personReducer.personEdit
+
+    //const {editPerson, setEditPerson} = useContext(PersonContext);
 
     const handleClick = () => {
         if(username!=""){
@@ -20,7 +24,7 @@ function PersonForm({addPerson}) {
             setName('')
             setEmail('')
             setPhone('')
-            setEditPerson({})
+            //setEditPerson({})
         }
     }
 
